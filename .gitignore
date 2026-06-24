@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Компания — конфиденциально, не в публичный репо
+spec_generator/logo.png
+spec_generator/signature.png
+spec_generator/stamp.png
+
+# Фото-библиотека — слишком большая для git
+spec_generator/styles/
+
+# Рабочие/временные файлы
+*.xls
+*.xlsx
+*.bat
+organize_photos.py
+extract_logo.py
+Разложить\ фото.bat
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
