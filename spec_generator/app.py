@@ -44,29 +44,8 @@ h1 { color: #1F5C99; }
 
 # ─── Сайдбар: настройки ───────────────────────────────────────────────────────
 with st.sidebar:
-    st.image('https://via.placeholder.com/200x60/1F5C99/FFFFFF?text=СОЮЗ-М', width=200)
     st.title('Настройки')
 
-    st.subheader('🔑 AI настройки')
-    api_key = st.text_input(
-        'API ключ',
-        type='password',
-        placeholder='sk-...',
-        help='Ключ от прокси (или Anthropic/OpenAI)',
-    )
-    proxy_base_url = st.text_input(
-        'Base URL прокси',
-        value='https://api.proxyapi.ru/openai/v1',
-        help='URL прокси-сервера. ProxyAPI.ru уже вписан по умолчанию.',
-    )
-    ai_model = st.selectbox(
-        'Модель',
-        options=['gpt-4o-mini', 'gpt-4o', 'gpt-4.1-mini', 'o4-mini', 'claude-haiku-4-5-20251001'],
-        index=0,
-        help='gpt-4o-mini — оптимальный баланс цена/качество',
-    )
-
-    st.divider()
     st.subheader('💰 Ценообразование')
     markup_pct = st.slider(
         'Наценка к рыночной цене WB (%)',
@@ -98,8 +77,29 @@ with st.sidebar:
         selected_style = None
         st.info('📁 Папка styles/ пуста. Добавь фото чтобы выбрать стиль.')
 
-    remove_bg = st.checkbox('Удалять фон (rembg)', value=False)
     skip_photo_on_error = st.checkbox('Пропускать фото при ошибке', value=True)
+
+    st.divider()
+    st.subheader('🔑 AI настройки')
+    _default_key = st.secrets.get('PROXYAPI_KEY', '') if hasattr(st, 'secrets') else ''
+    api_key = st.text_input(
+        'API ключ',
+        value=_default_key,
+        type='password',
+        placeholder='sk-...',
+        help='Ключ от прокси (или Anthropic/OpenAI)',
+    )
+    proxy_base_url = st.text_input(
+        'Base URL прокси',
+        value='https://api.proxyapi.ru/openai/v1',
+        help='URL прокси-сервера. ProxyAPI.ru уже вписан по умолчанию.',
+    )
+    ai_model = st.selectbox(
+        'Модель',
+        options=['gpt-4o-mini', 'gpt-4o', 'gpt-4.1-mini', 'o4-mini'],
+        index=0,
+        help='gpt-4o-mini — оптимальный баланс цена/качество',
+    )
 
     st.divider()
     st.subheader('ℹ️ О приложении')
@@ -240,7 +240,7 @@ with tab_main:
                         if raw_photo:
                             try:
                                 photo_bytes = prepare_for_excel(
-                                    raw_photo, max_size=130, remove_bg=remove_bg,
+                                    raw_photo, max_size=130, remove_bg=False,
                                 )
                             except Exception as e:
                                 if not skip_photo_on_error:
