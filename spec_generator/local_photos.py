@@ -145,8 +145,9 @@ def find_photo(product_name: str, style: str) -> Optional[bytes]:
         exact = len(query_words & file_words)
         if exact == 0:
             continue
-        # Доля совпавших слов относительно большего набора
-        ratio = exact / max(len(query_words), len(file_words))
+        # Доля совпавших слов файла, покрытых запросом
+        # (позволяет длинным названиям матчить короткие имена файлов)
+        ratio = exact / len(file_words)
         # Бонус за частичное совпадение
         partial = sum(
             1 for qw in query_words
